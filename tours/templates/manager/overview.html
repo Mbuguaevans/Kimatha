@@ -1,0 +1,46 @@
+{% extends 'manager/manager_base.html' %}
+
+{% block manager_title %}Dashboard Overview{% endblock %}
+
+{% block manager_content %}
+<!-- STATS GRID -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px;">
+    <div style="background: var(--bg-main); padding: 25px; border-radius: 10px; border-left: 4px solid var(--primary-yellow);">
+        <h3 style="font-size: 13px; color: var(--accent-rose); text-transform: uppercase; margin-bottom: 10px;">Total Bookings</h3>
+        <p style="font-size: 32px; font-weight: 700; color: var(--text-main); margin: 0;">{{ total_bookings }}</p>
+    </div>
+    <div style="background: var(--bg-main); padding: 25px; border-radius: 10px; border-left: 4px solid #ff9800;">
+        <h3 style="font-size: 13px; color: var(--accent-rose); text-transform: uppercase; margin-bottom: 10px;">Pending Action</h3>
+        <p style="font-size: 32px; font-weight: 700; color: var(--text-main); margin: 0;">{{ pending_bookings }}</p>
+    </div>
+    <div style="background: var(--bg-main); padding: 25px; border-radius: 10px; border-left: 4px solid #4CAF50;">
+        <h3 style="font-size: 13px; color: var(--accent-rose); text-transform: uppercase; margin-bottom: 10px;">Active Tours</h3>
+        <p style="font-size: 32px; font-weight: 700; color: var(--text-main); margin: 0;">{{ total_tours }}</p>
+    </div>
+</div>
+
+<!-- RECENT BOOKINGS -->
+<h3 style="margin-bottom: 20px; color: var(--text-main);">Recent Bookings</h3>
+<table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <thead>
+        <tr>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Client</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Tour</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in recent_bookings %}
+        <tr>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;"><strong>{{ booking.name }}</strong></td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">{{ booking.tour.title|default:"General" }}</td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">
+                <span class="badge badge-{{ booking.status }}" style="padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; text-transform: uppercase;">{{ booking.status|title }}</span>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" style="padding: 20px; text-align: center; color: var(--accent-rose);">No bookings yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

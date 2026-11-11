@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up — Christ Centered Adventures{% endblock %}
+
+{% block content %}
+<section class="container" style="padding-block: var(--space-8); max-width: 500px;">
+  <h1 style="text-align: center;">Create an Account</h1>
+  <p style="text-align: center; color: var(--color-text-muted);">Create an account to track your inquiries and upcoming trips.</p>
+
+  <form method="POST" style="background: var(--color-surface); padding: var(--space-6); border-radius: var(--radius-lg); border: 1px solid var(--color-border); margin-top: var(--space-5);">
+        {% csrf_token %}
+
+    {% for field in form %}
+      <div class="field" style="margin-bottom: var(--space-4);">
+        <label class="field__label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}" class="field__input" {% if field.field.required %}required{% endif %}>
+        {% if field.errors %}
+          <p style="color: var(--color-danger); font-size: var(--text-sm); margin-top: var(--space-1);">{{ field.errors.0 }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn--primary btn--lg" style="width: 100%; margin-top: var(--space-4);">Sign Up / Log In</button>
+  </form>
+  
+  <p style="text-align: center; margin-top: var(--space-4); font-size: var(--text-sm);">
+    Already have an account? <a href="{% url 'login' %}">Log in here</a>.
+  </p>
+</section>
+{% endblock %}

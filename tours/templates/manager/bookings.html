@@ -1,0 +1,47 @@
+{% extends 'manager/manager_base.html' %}
+
+{% block manager_title %}All Bookings{% endblock %}
+
+{% block manager_content %}
+<div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 15px;">
+    <table style="width: 100%; min-width: 800px; border-collapse: collapse; text-align: left;">
+    <thead>
+        <tr>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Client</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Tour</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Group</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Status</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr class="{% if booking.is_cancelled %}row-cancelled{% endif %}">
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">
+                <strong>{{ booking.name }}</strong><br>
+                <small style="color: var(--accent-rose);">{{ booking.email }}</small>
+            </td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">{{ booking.tour.title|default:"General Inquiry" }}</td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">{{ booking.group_size|default:"1" }}</td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">
+                {% if booking.is_cancelled %}
+                    <span class="badge badge-danger">Cancelled</span>
+                {% else %}
+                    <span class="badge badge-{{ booking.status }}">{{ booking.status|title }}</span>
+                {% endif %}
+            </td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">
+                {% if not booking.is_cancelled %}
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <a href="{% url 'update_booking_status' booking.id 'contacted' %}" class="btn-sm" style="padding: 6px 10px; background: var(--primary-yellow); color: var(--bg-main); text-decoration: none; border-radius: 5px; font-size: 12px;">Contacted</a>
+                    <a href="{% url 'update_booking_status' booking.id 'booked' %}" class="btn-sm" style="padding: 6px 10px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; font-size: 12px;">Booked</a>
+                    <a href="{% url 'update_booking_status' booking.id 'closed' %}" class="btn-sm" style="padding: 6px 10px; background: #555; color: white; text-decoration: none; border-radius: 5px; font-size: 12px;">Close</a>
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- 1. HERO SECTION -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Discover Creation,<br>Deepen Your <span class="highlight">Faith</span></h1>
+        <p>Embark on transformative journeys designed to connect you deeper with God’s creation. Whether you're seeking fellowship on breathtaking mountain trails, quiet reflection in serene getaways, or purposeful community service abroad, we guide every step of your adventure.</p>
+        
+        <div class="hero-actions">
+            <a href="{% url 'tour_list' %}" class="btn-primary">Book Now</a>
+            <a href="{% url 'tour_list' %}" class="btn-ghost">Explore Tours</a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. CORE VALUES SECTION -->
+<section class="core-values section-padding">
+    <div class="container">
+        <div class="section-header">
+            <h2>Why Travel With Us?</h2>
+            <p>We offer more than just a trip; we offer an opportunity to connect.</p>
+        </div>
+        
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="icon-box">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-yellow)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <h3>Faith-Led Itineraries</h3>
+                <p>Every trip incorporates moments of devotion, worship, or fellowship in inspiring natural settings.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="icon-box">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-yellow)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <h3>Community & Fellowship</h3>
+                <p>Travel alongside like-minded believers and build lasting, faith-driven friendships.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="icon-box">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-yellow)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+                </div>
+                <h3>Purposeful Travel</h3>
+                <p>Experience ethical tourism that respects local communities and honors creation.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. FEATURED TOURS SECTION -->
+<section class="featured-tours section-padding">
+    <div class="container">
+        <div class="section-header">
+            <h2>Upcoming Adventures</h2>
+            <p>Join us on one of our upcoming faith-based journeys.</p>
+        </div>
+        
+        <div class="tours-preview-grid">
+            {% for tour in featured_tours %}
+            <div class="preview-card">
+                <div class="preview-img" style="background-image: url('{% if tour.hero_image %}{{ tour.hero_image.url }}{% else %}https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800{% endif %}');">
+                    <div class="price-tag">From KSh {{ tour.price_from }}</div>
+                </div>
+                <div class="preview-content">
+                    <p class="preview-location"><i class="fas fa-map-marker-alt"></i> {{ tour.destination }}</p>
+                    <h3>{{ tour.title }}</h3>
+                    <p>{{ tour.summary|truncatewords:15 }}</p>
+                    <a href="{% url 'tour_detail' tour.slug %}" class="btn-primary" style="padding: 10px 20px; font-size: 14px; margin-top: 15px; display: inline-block;">View Details</a>
+                </div>
+            </div>
+            {% empty %}
+            <p style="text-align: center; width: 100%; color: #888;">New tours are being added soon!</p>
+            {% endfor %}
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="{% url 'tour_list' %}" class="btn-primary">View All Tours</a>
+        </div>
+    </div>
+</section>
+
+<!-- 4. TESTIMONIALS SECTION -->
+<section class="testimonials section-padding">
+    <div class="container">
+        <div class="section-header text-white">
+            <h2>Pilgrim Stories</h2>
+            <p>Hear from those who have journeyed with us.</p>
+        </div>
+        
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="quote">"This trip was more than a vacation. Standing at the top of the mountain, singing hymns with fellow believers, was a spiritual experience I will never forget."</p>
+                <div class="author">
+                    <strong>Sarah M.</strong>
+                    <span>Mountain Retreat 2025</span>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="quote">"The perfect balance of adventure and devotion. The guides were knowledgeable, and the fellowship was truly uplifting."</p>
+                <div class="author">
+                    <strong>David K.</strong>
+                    <span>Holy Land Pilgrimage 2025</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. NEWSLETTER BANNER -->
+<section class="newsletter-banner">
+    <div class="container">
+        <h2>Ready to Walk Where Creation Inspires?</h2>
+        <p>Join our newsletter to get notified about upcoming trips and early-bird discounts.</p>
+        
+        <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email address" required>
+            <button type="submit" class="btn-primary">Subscribe</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

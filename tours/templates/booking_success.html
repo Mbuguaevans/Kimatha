@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="static-page-section" style="display: flex; justify-content: center; align-items: center;">
+    <div class="static-page-card" style="text-align: center;">
+        <h1 style="color: #4CAF50; font-size: 4rem;">✓</h1>
+        <h2>Payment Confirmed!</h2>
+        <p>Your booking is secured and your deposit has been received.</p>
+        <p>A confirmation email has been sent to your inbox.</p>
+        <a href="{% url 'profile' %}" class="btn-primary" style="margin-top: 20px;">Go to My Dashboard</a>
+    </div>
+</section>
+{% endblock %}

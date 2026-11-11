@@ -1,0 +1,104 @@
+/* ============================================================
+   Design tokens — the single source of truth.
+   ============================================================ */
+:root {
+  /* ---------- Color: brand ---------- */
+  --color-primary:        #A3624A;
+  --color-primary-hover:  #8C5138;
+  --color-primary-active: #76422D;
+  --color-primary-soft:   #EFE0D8;
+
+  --color-secondary:        #4F6355;
+  --color-secondary-hover:  #405046;
+  --color-secondary-active: #333F38;
+  --color-secondary-soft:   #E6EDE7;
+
+  --color-accent:        #BFA46B;
+  --color-accent-hover:  #A88F5A;
+  --color-accent-soft:   #F2ECD9;
+
+  /* ---------- Color: neutrals (warm) ---------- */
+  --color-bg:            #FAF7F2;
+  --color-surface:       #FFFFFF;
+  --color-surface-alt:   #F2EDE5;
+  --color-border:        #E4DDD3;
+  --color-border-strong: #C8BDB0;
+
+  --color-text:          #1F1B18;
+  --color-text-muted:    #6B6158;
+  --color-text-inverse:  #FAF7F2;
+
+  /* ---------- Color: semantic ---------- */
+  --color-success:       #5B7B62;
+  --color-success-soft:  #E4EDE5;
+  --color-warning:       #9A7F4F;
+  --color-warning-soft:  #F2EAD4;
+  --color-danger:        #9B5C50;
+  --color-danger-soft:   #EFE0DC;
+  --color-info:          #5E7684;
+  --color-info-soft:     #E3EAEE;
+
+  /* ---------- Focus ---------- */
+  --color-focus:         #3A5A78;
+
+  /* ---------- Type: families ---------- */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---------- Type: scale ---------- */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-md:   1.125rem;
+  --text-lg:   1.375rem;
+  --text-xl:   1.75rem;
+  --text-2xl:  2.25rem;
+  --text-3xl:  3rem;
+  --text-4xl:  3.75rem;
+
+  /* ---------- Type: line heights ---------- */
+  --leading-tight:  1.15;
+  --leading-snug:   1.3;
+  --leading-normal: 1.55;
+  --leading-loose:  1.75;
+
+  /* ---------- Type: weights ---------- */
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold:600;
+  --weight-bold:    700;
+
+  /* ---------- Spacing ---------- */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.5rem;
+  --space-6:  2rem;
+  --space-7:  3rem;
+  --space-8:  4rem;
+  --space-9:  6rem;
+
+  /* ---------- Radius ---------- */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-pill: 999px;
+
+  /* ---------- Shadow ---------- */
+  --shadow-sm: 0 1px 2px rgba(31, 27, 24, 0.03);
+  --shadow-md: 0 2px 8px rgba(31, 27, 24, 0.05);
+  --shadow-lg: 0 8px 24px rgba(31, 27, 24, 0.07);
+
+  /* ---------- Layout ---------- */
+  --container-sm: 640px;
+  --container-md: 800px;
+  --container-lg: 1100px;
+  --container-xl: 1280px;
+
+  /* ---------- Motion ---------- */
+  --duration-fast:   120ms;
+  --duration-normal: 200ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}

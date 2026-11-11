@@ -1,0 +1,339 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Christ Centered Adventures{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}?v=999">
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <!-- LOGO -->
+            <a href="/" class="logo logo-container">
+                <img src="{% static 'img/logo.png' %}" alt="CCA Logo" class="logo-img">
+            </a>
+
+            <!-- NAV LINKS -->
+            <nav class="nav-links">
+                <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+                <a href="{% url 'tour_list' %}" class="{% if '/tours/' in request.path %}active{% endif %}">Tours</a>
+                
+                {% if user.is_authenticated %}
+                    
+                    <!-- USER DROPDOWN -->
+                    <div class="user-dropdown">
+                        <button class="dropdown-toggle" id="user-menu-btn">
+                            
+                            {% if user.userprofile.avatar %}
+                                <img src="{{ user.userprofile.avatar.url }}" class="nav-avatar" alt="{{ user.username }}">
+                            {% else %}
+                                <div class="nav-avatar-fallback">{{ user.username|first|upper }}</div>
+                            {% endif %}
+
+                            <span class="nav-username">{{ user.username }}</span>
+                        </button>
+                        
+                        <div class="dropdown-menu" id="user-menu">
+                            {% if user.is_superuser %}
+                                <a href="{% url 'manager_dashboard' %}" class="dropdown-item" style="color: var(--primary-yellow); font-weight: 600;">
+                                    ⚡ Manager Dashboard
+                                </a>
+                                <div class="dropdown-divider"></div>
+                            {% endif %}
+                            
+                            <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
+                            <a href="{% url 'profile' %}#settings" class="dropdown-item">Traveler Settings</a>
+                            
+                            <div class="dropdown-divider"></div>
+                            
+                            <form method="post" action="{% url 'account_logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item text-danger">Log Out</button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="#" id="open-login">Login</a>
+                {% endif %}
+            </nav>
+            
+            <!-- MOBILE MENU BUTTON -->
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-container">
+
+            <!-- COLUMN 1: Brand & Mission -->
+            <div class="footer-col footer-brand">
+                <a href="/" class="logo" style="margin-bottom: 20px; display: inline-flex;">
+                    <img src="{% static 'img/logo.png' %}" alt="Christ Centered Adventures Logo" class="logo-img">
+                </a>
+                <p>
+                    Inspiring Christians worldwide through transformative travel experiences that celebrate faith, worship, and community.
+                </p>
+            </div>
+
+            <!-- COLUMN 2: Quick Links -->
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="{% url 'tour_list' %}">Upcoming Tours</a></li>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- COLUMN 3: Legal Compliance -->
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'terms' %}">Terms of Service</a></li>
+                    <li><a href="{% url 'cancellation' %}">Cancellation Policy</a></li>
+                    <li><a href="{% url 'cookies' %}">Cookie Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- COLUMN 4: Contact & Socials -->
+            <div class="footer-col">
+                <h4>Get in Touch</h4>
+                <div class="footer-contact">
+                    <p>Nairobi, Kenya</p>
+                    <p><a href="mailto:hello@christcenteredadventures.com">hello@christcenteredadventures.com</a></p>
+                </div>
+
+                <div class="footer-socials">
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/profile.php?id=100093692251791" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/kim.atha_" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/evans-kamau-33801b22b" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM BAR -->
+        <div class="footer-bottom">
+            <p>&copy; 2026 Christ Centered Adventures. All rights reserved.</p>
+            <p>Designed with faith in Nairobi, Kenya.</p>
+        </div>
+    </footer>
+
+    <!-- LOGIN DRAWER -->
+    <div id="login-overlay" class="drawer-overlay"></div>
+    <div id="login-drawer" class="login-drawer">
+        <div class="drawer-header">
+            <h2 id="drawer-title">Welcome Back</h2>
+            <button id="close-drawer" class="close-drawer">&times;</button>
+        </div>
+    
+        <div class="drawer-body">
+            
+            <!-- LOGIN VIEW -->
+            <div id="drawer-login-view">
+                <a href="{% provider_login_url 'google' %}" class="social-btn google-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Continue with Google
+                </a>
+
+                <div class="divider"><span>or use email</span></div>
+
+                <form method="POST" action="{% url 'account_login' %}">
+                    {% csrf_token %}
+
+                    <!-- ADD THIS ERROR BLOCK -->
+                    {% if form.errors %}
+                        <div style="background: rgba(255, 68, 68, 0.1); border-left: 4px solid #ff4444; padding: 10px 15px; margin-bottom: 15px; border-radius: 5px;">
+                            <p style="color: #ff4444; margin: 0; font-size: 13px;">The username or password you entered is incorrect.</p>
+                        </div>
+                    {% endif %}
+                    <!-- END ERROR BLOCK -->
+
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    <div class="form-group">
+                        <label>Email or Username</label>
+                        <input type="text" name="login" class="input-field" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" class="input-field" required>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Log In</button>
+                </form>
+
+                <p class="signup-link">
+                    Don't have an account? <a href="#" onclick="toggleDrawer('signup')">Sign Up</a>
+                </p>
+            </div>
+
+            <!-- SIGNUP VIEW -->
+            <div id="drawer-signup-view" style="display: none;">
+                <form method="POST" action="{% url 'account_signup' %}">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div style="background: rgba(255, 68, 68, 0.1); border-left: 4px solid #ff4444; padding: 10px 15px; margin-bottom: 15px; border-radius: 5px;">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <p style="color: #ff4444; margin: 0; font-size: 13px;">{{ error }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" class="input-field" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password1" class="input-field" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="password2" class="input-field" required>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Create Account</button>
+                </form>
+
+                <p class="signup-link">
+                    Already have an account? <a href="#" onclick="toggleDrawer('login')">Log In</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- WHATSAPP FLOAT -->
+    <a href="https://wa.me/254700000000?text=Hello%20Christ%20Centered%20Adventures,%20I%20have%20a%20question." class="whatsapp-float" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+        </svg>
+    </a>
+
+    {% block extra_js %}{% endblock %}
+
+    <!-- SCRIPTS -->
+    <script>
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Login Drawer Logic
+        function openLoginDrawer() {
+            const drawer = document.getElementById('login-drawer');
+            const overlay = document.getElementById('login-overlay');
+            if (drawer && overlay) {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+            }
+        }
+
+        const loginBtn = document.getElementById('open-login');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                openLoginDrawer();
+            });
+        }
+
+        const closeBtn = document.getElementById('close-drawer');
+        const overlay = document.getElementById('login-overlay');
+        
+        function closeDrawer() {
+            document.getElementById('login-drawer').classList.remove('open');
+            document.getElementById('login-overlay').classList.remove('open');
+        }
+
+        if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+        if (overlay) overlay.addEventListener('click', closeDrawer);
+
+        // Toggle between Login and Signup inside the drawer
+        function toggleDrawer(view) {
+            const loginView = document.getElementById('drawer-login-view');
+            const signupView = document.getElementById('drawer-signup-view');
+            const title = document.getElementById('drawer-title');
+
+            if (view === 'signup') {
+                loginView.style.display = 'none';
+                signupView.style.display = 'block';
+                title.innerText = 'Create Account';
+            } else {
+                loginView.style.display = 'block';
+                signupView.style.display = 'none';
+                title.innerText = 'Welcome Back';
+            }
+        }
+
+        // --- USER DROPDOWN LOGIC ---
+        const userMenuBtn = document.getElementById('user-menu-btn');
+        const userMenu = document.getElementById('user-menu');
+
+        if (userMenuBtn && userMenu) {
+            userMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation(); 
+                userMenu.classList.toggle('show');
+            });
+
+            window.addEventListener('click', function(e) {
+                if (!userMenu.contains(e.target) && !userMenuBtn.contains(e.target)) {
+                    userMenu.classList.remove('show');
+                }
+            });
+        }
+
+        // --- MOBILE MENU TOGGLE LOGIC ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('mobile-open');
+            });
+        }
+    </script>
+</body>
+</html>

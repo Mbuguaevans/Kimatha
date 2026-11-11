@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ action }} — Manager{% endblock %}
+
+{% block content %}
+<section class="manager-section">
+    <div class="container" style="max-width: 800px;">
+        
+        <div class="manager-header">
+            <h1>{{ action }}</h1>
+            <a href="{% url 'manager_dashboard' %}" class="back-link">&larr; Back to Dashboard</a>
+        </div>
+
+        <div class="settings-form">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tour Title</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="form-group">
+                        <label>Slug (URL)</label>
+                        {{ form.slug }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Summary (Short description for cards)</label>
+                    {{ form.summary }}
+                </div>
+
+                <div class="form-group">
+                    <label>Full Description</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Destination</label>
+                        {{ form.destination }}
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (Days)</label>
+                        {{ form.duration_days }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        {{ form.start_date }}
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        {{ form.end_date }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price From (KSh)</label>
+                        {{ form.price_from }}
+                    </div>
+                    <div class="form-group">
+                        <label>Slots Available</label>
+                        {{ form.slots_available }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Hero Image (Upload Photo)</label>
+                    {{ form.hero_image }}
+                </div>
+
+                <div class="form-row" style="margin-top: 20px;">
+                    <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                        {{ form.is_published }}
+                        <label style="margin: 0;">Publish this tour (visible to public)</label>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                        {{ form.is_featured }}
+                        <label style="margin: 0;">Feature on Homepage</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" style="margin-top: 30px; width: 100%;">Save Tour</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

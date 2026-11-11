@@ -1,0 +1,46 @@
+{% extends 'manager/manager_base.html' %}
+
+{% block manager_title %}Manage Tours{% endblock %}
+
+{% block manager_content %}
+<div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 15px;">
+    <table style="width: 100%; min-width: 800px; border-collapse: collapse; text-align: left;">
+    <thead>
+        <tr>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Tour Title</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Destination</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Price</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Slots</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Status</th>
+            <th style="padding: 15px 10px; border-bottom: 2px solid var(--bg-surface-alt); color: var(--accent-rose); font-size: 12px; text-transform: uppercase;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tour in all_tours %}
+        <tr>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;"><strong>{{ tour.title }}</strong></td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">{{ tour.destination }}</td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">KSh {{ tour.price_from }}</td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">{{ tour.slots_available }}</td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">
+                {% if tour.is_published %}
+                    <span class="badge badge-booked">Published</span>
+                {% else %}
+                    <span class="badge badge-danger">Draft</span>
+                {% endif %}
+            </td>
+            <td style="padding: 15px 10px; border-bottom: 1px solid var(--bg-surface-alt); color: var(--text-main); font-size: 14px;">
+                <div style="display: flex; gap: 8px;">
+                    <a href="{% url 'manager_tour_edit' tour.slug %}" class="btn-sm btn-warning" style="padding: 6px 12px; border-radius: 5px; text-decoration: none; font-size: 12px; font-weight: 600; background: var(--primary-yellow); color: var(--bg-main);">Edit</a>
+                    <form method="POST" action="{% url 'manager_tour_delete' tour.slug %}" style="display: inline;" onsubmit="return confirm('Delete this tour?');">
+                        {% csrf_token %}
+                        <button type="submit" style="padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: 600; background: #ff4444; color: white; border: none; cursor: pointer;">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

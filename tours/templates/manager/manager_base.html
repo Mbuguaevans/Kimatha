@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- INLINE STYLES ENSURE THIS NEVER BREAKS -->
+<div class="manager-layout">
+    
+    <!-- SIDEBAR -->
+    <aside class="manager-sidebar">
+        <h2 style="color: white; margin-bottom: 5px; font-size: 22px;">Menu</h2>
+        <p style="color: var(--accent-rose); margin-bottom: 25px; font-size: 13px;">Admin: {{ user.username }}</p>
+        
+        <nav class="manager-nav">
+            <a href="{% url 'manager_dashboard' %}" style="display: block; padding: 12px 15px; text-decoration: none; border-radius: 8px; font-weight: 500; {% if request.path == '/manager/' %}background: var(--primary-yellow); color: var(--bg-main);{% else %}color: var(--text-main);{% endif %}">📊 Overview</a>
+            <a href="{% url 'manager_tours' %}" style="display: block; padding: 12px 15px; text-decoration: none; border-radius: 8px; font-weight: 500; {% if '/manager/tours/' in request.path %}background: var(--primary-yellow); color: var(--bg-main);{% else %}color: var(--text-main);{% endif %}">🗺️ Manage Tours</a>
+            <a href="{% url 'manager_clients' %}" style="display: block; padding: 12px 15px; text-decoration: none; border-radius: 8px; font-weight: 500; {% if '/manager/clients/' in request.path %}background: var(--primary-yellow); color: var(--bg-main);{% else %}color: var(--text-main);{% endif %}">👥 Clients</a>
+            <a href="{% url 'manager_bookings' %}" style="display: block; padding: 12px 15px; text-decoration: none; border-radius: 8px; font-weight: 500; {% if '/manager/bookings/' in request.path %}background: var(--primary-yellow); color: var(--bg-main);{% else %}color: var(--text-main);{% endif %}">📝 Bookings</a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="manager-main">
+        
+        <!-- HEADER (Flexbox forces Title left, Button right) -->
+        <div class="manager-header">
+            <h1 style="color: white; font-size: 28px; margin: 0;">{% block manager_title %}Command Center{% endblock %}</h1>
+            <a href="{% url 'manager_tour_create' %}" class="btn-primary" style="padding: 10px 20px; font-size: 14px; text-decoration: none; white-space: nowrap;">+ Add New Tour</a>
+        </div>
+
+        <!-- INNER PAGE CONTENT GOES HERE -->
+        {% block manager_content %}
+        {% endblock %}
+        
+    </div>
+
+</div>
+{% endblock %}

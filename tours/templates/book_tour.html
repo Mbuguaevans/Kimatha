@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirm Booking — {{ tour.title }}{% endblock %}
+
+{% block content %}
+<section class="booking-section">
+    <div class="container">
+        <div class="booking-card">
+
+            <div class="booking-header">
+                <a href="{% url 'tour_detail' tour.slug %}" class="back-link">&larr; Back to Tour</a>
+                <h1>Confirm Your Trip</h1>
+                <p>You are booking <strong>{{ tour.title }}</strong></p>
+            </div>
+
+            <!-- USER DETAILS SUMMARY (Read-Only) -->
+            <div class="user-summary-box">
+                <h3>Traveller Details</h3>
+                <div class="summary-row">
+                    <span>Name:</span>
+                    <strong>{{ user.get_full_name|default:user.username }}</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Email:</span>
+                    <strong>{{ user.email }}</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Phone:</span>
+                    <strong>{{ profile.phone }}</strong>
+                </div>
+                <a href="{% url 'profile' %}" class="edit-link">Edit Profile Details</a>
+            </div>
+
+            <form id="booking-form" method="POST" class="booking-form">
+                {% csrf_token %}
+
+                <!-- ONLY ASKING FOR GROUP SIZE -->
+                <div class="form-group" style="margin-top: 30px;">
+                    <label style="font-size: 1.1rem; color: #fff; margin-bottom: 15px; display: block;">How many people are in your group?</label>
+                    <input type="number" name="group_size" id="group_size_input" value="1" min="1" class="big-input" required>
+                </div>
+
+                <!-- LIVE PRICE CALCULATOR -->
+                <div class="price-calculator">
+                    <div class="price-row">
+                        <span>Price per person:</span>
+                        <span>KSh {{ tour.price_from }}</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Total Trip Cost:</span>
+                        <span id="total-price-display">KSh {{ tour.price_from }}</span>
+                    </div>
+                    <div class="price-row highlight">
+                        <span>Deposit Required (20%):</span>
+                        <span id="deposit-display">KSh 0.00</span>
+                    </div>
+                    <p class="price-note">
+                        <i class="fas fa-info-circle"></i> The 20% deposit secures your spot and is non-refundable. The remaining balance will be due 30 days before departure.
+                    </p>
+                </div>
+
+            <!-- M-PESA PAYMENT SECTION -->
+            <div style="background: #1a1a1a; padding: 25px; border-radius: 10px; margin-top: 30px; border: 1px solid var(--bg-surface-alt);">
+                <h3 style="color: var(--text-white); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--primary-yellow)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    Pay Deposit with M-Pesa
+                </h3>
+                <p style="color: var(--accent-rose); font-size: 14px; margin-bottom: 20px;">
+                    An M-Pesa STK Push will be sent to your phone. Enter your PIN to authorize the payment.
+                </p>
+
+                <div class="form-group">
+                    <label for="mpesa_phone" style="color: var(--text-main); font-size: 14px; margin-bottom: 8px; display: block;">M-Pesa Phone Number</label>
+                    <input type="tel" id="mpesa_phone" name="mpesa_phone" class="big-input" placeholder="e.g., 0712345678" value="{{ profile.phone }}" required>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 1px solid var(--bg-surface-alt); padding-top: 15px;">
+                    <span style="color: var(--text-main); font-weight: 600;">Total to Pay (Deposit):</span>
+                    <span id="mpesa-amount-display" style="color: var(--primary-yellow); font-size: 24px; font-weight: 700;">KSh 0.00</span>
+                </div>
+
+                <button type="button" id="pay-mpesa-btn" class="btn-primary" style="width: 100%; margin-top: 20px; padding: 15px; font-size: 18px; border: none; cursor: pointer;">
+                    Pay KSh <span id="btn-amount-display">0.00</span> with M-Pesa
+                </button>
+            </div>
+
+        </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const pricePerPerson = parseFloat("{{ tour.price_from|default:0 }}");
+    const groupSizeInput = document.getElementById('group_size_input');
+    const totalDisplay = document.getElementById('total-price-display');
+    const depositDisplay = document.getElementById('deposit-display');
+    const mpesaAmountDisplay = document.getElementById('mpesa-amount-display');
+    const btnAmountDisplay = document.getElementById('btn-amount-display');
+
+    function calculatePrice() {
+        let size = parseInt(groupSizeInput.value) || 1;
+        if (size < 1) size = 1;
+
+        const total = pricePerPerson * size;
+        const deposit = total * 0.20;
+
+        totalDisplay.innerText = `KSh ${total.toFixed(2)}`;
+        depositDisplay.innerText = `KSh ${deposit.toFixed(2)}`;
+
+        mpesaAmountDisplay.innerText = `KSh ${Math.round(deposit)}`;
+        btnAmountDisplay.innerText = `${Math.round(deposit)}`;
+    }
+
+    calculatePrice();
+    if(groupSizeInput) groupSizeInput.addEventListener('input', calculatePrice);
+
+    const payBtn = document.getElementById('pay-mpesa-btn');
+    const bookingForm = document.getElementById('booking-form');
+
+    payBtn.addEventListener('click', function() {
+        const phoneNumber = document.getElementById('mpesa_phone').value;
+        const amountToPay = document.getElementById('mpesa-amount-display').innerText.replace('KSh ', '');
+
+        if (!phoneNumber) {
+            alert('Please enter your M-Pesa phone number.');
+            return;
+        }
+
+        payBtn.disabled = true;
+        payBtn.textContent = 'Sending STK Push...';
+
+        const formData = new FormData(bookingForm);
+        formData.append('phone_number', phoneNumber);
+        formData.append('amount', amountToPay);
+        formData.append('tour_slug', '{{ tour.slug }}');
+
+        fetch('/api/initiate-mpesa-payment/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                payBtn.textContent = 'Check your phone for the PIN prompt...';
+
+                const inquiryId = data.inquiry_id;
+                const pollInterval = setInterval(() => {
+                    fetch(`/api/payment-status/${inquiryId}/`)
+                    .then(res => res.json())
+                    .then(statusData => {
+                        if (statusData.status === 'booked') {
+                            clearInterval(pollInterval);
+                            window.location.href = "{% url 'booking_success' %}";
+                        } else if (statusData.status === 'cancelled') {
+                            clearInterval(pollInterval);
+                            alert('Payment was cancelled or failed. Please try again.');
+                            window.location.reload();
+                        }
+                    });
+                }, 3000);
+
+            } else {
+                alert('Error: ' + data.message);
+                payBtn.disabled = false;
+                payBtn.textContent = `Pay KSh ${amountToPay} with M-Pesa`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please check the console.');
+            payBtn.disabled = false;
+            payBtn.textContent = `Pay KSh ${amountToPay} with M-Pesa`;
+        });
+    });
+});
+</script>
+{% endblock %}
