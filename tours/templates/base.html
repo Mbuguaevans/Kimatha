@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/custom.css' %}?v=999">
@@ -26,21 +26,23 @@
     <header class="navbar" id="navbar">
         <div class="nav-container">
             <!-- LOGO -->
-            <a href="/" class="logo logo-container">
-                <img src="{% static 'img/logo1.png' %}" alt="CCA Logo" class="logo-img">
+            <a href="{% url 'home' %}" class="navbar-brand">
+                <img src="{% static 'img/logoicon.png' %}"
+                     alt="Christ Centered Adventures"
+                     class="site-logo">
             </a>
 
             <!-- NAV LINKS -->
             <nav class="nav-links">
                 <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
                 <a href="{% url 'tour_list' %}" class="{% if '/tours/' in request.path %}active{% endif %}">Tours</a>
-                
+
                 {% if user.is_authenticated %}
-                    
+
                     <!-- USER DROPDOWN -->
                     <div class="user-dropdown">
                         <button class="dropdown-toggle" id="user-menu-btn">
-                            
+
                             {% if user.userprofile.avatar %}
                                 <img src="{{ user.userprofile.avatar.url }}" class="nav-avatar" alt="{{ user.username }}">
                             {% else %}
@@ -49,20 +51,20 @@
 
                             <span class="nav-username">{{ user.username }}</span>
                         </button>
-                        
+
                         <div class="dropdown-menu" id="user-menu">
                             {% if user.is_superuser %}
-                                <a href="{% url 'manager_dashboard' %}" class="dropdown-item" style="color: var(--primary-yellow); font-weight: 600;">
+                                <a href="{% url 'manager_dashboard' %}" class="dropdown-item" style="color: var(--warm-orange); font-weight: 600;">
                                     ⚡ Manager Dashboard
                                 </a>
                                 <div class="dropdown-divider"></div>
                             {% endif %}
-                            
+
                             <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
                             <a href="{% url 'profile' %}#settings" class="dropdown-item">Traveler Settings</a>
-                            
+
                             <div class="dropdown-divider"></div>
-                            
+
                             <form method="post" action="{% url 'account_logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="dropdown-item text-danger">Log Out</button>
@@ -73,7 +75,7 @@
                     <a href="#" id="open-login">Login</a>
                 {% endif %}
             </nav>
-            
+
             <!-- MOBILE MENU BUTTON -->
             <button class="mobile-menu-btn" id="mobile-menu-btn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
@@ -91,11 +93,9 @@
     <footer class="site-footer">
         <div class="footer-container">
 
-            <!-- COLUMN 1: Brand & Mission -->
+            <!-- COLUMN 1: About -->
             <div class="footer-col footer-brand">
-                <a href="/" class="logo" style="margin-bottom: 20px; display: inline-flex;">
-                    <img src="{% static 'img/logo1.png' %}" alt="Christ Centered Adventures Logo" class="logo-img">
-                </a>
+                <img src="{% static 'img/logoicon.png' %}" alt="Christ Centered Adventures" class="footer-logo">
                 <p>
                     Inspiring Christians worldwide through transformative travel experiences that celebrate faith, worship, and community.
                 </p>
@@ -103,46 +103,41 @@
 
             <!-- COLUMN 2: Quick Links -->
             <div class="footer-col">
-                <h4>Explore</h4>
+                <h4>Quick Links</h4>
                 <ul class="footer-links">
                     <li><a href="/">Home</a></li>
-                    <li><a href="{% url 'tour_list' %}">Upcoming Tours</a></li>
                     <li><a href="{% url 'about' %}">About Us</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'tour_list' %}">Tours</a></li>
+                    <li><a href="{% url 'tour_list' %}">Destinations</a></li>
+                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
                 </ul>
             </div>
 
-            <!-- COLUMN 3: Legal Compliance -->
+            <!-- COLUMN 3: Services -->
             <div class="footer-col">
-                <h4>Legal</h4>
+                <h4>Our Services</h4>
                 <ul class="footer-links">
-                    <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
-                    <li><a href="{% url 'terms' %}">Terms of Service</a></li>
-                    <li><a href="{% url 'cancellation' %}">Cancellation Policy</a></li>
-                    <li><a href="{% url 'cookies' %}">Cookie Policy</a></li>
+                    <li><a href="{% url 'tour_list' %}">Christian Tours</a></li>
+                    <li><a href="{% url 'tour_list' %}">Group Travel</a></li>
+                    <li><a href="{% url 'tour_list' %}">Pilgrimage Experiences</a></li>
+                    <li><a href="{% url 'tour_list' %}">Faith-Based Adventures</a></li>
                 </ul>
             </div>
 
-            <!-- COLUMN 4: Contact & Socials -->
+            <!-- COLUMN 4: Contact -->
             <div class="footer-col">
-                <h4>Get in Touch</h4>
+                <h4>Contact Us</h4>
                 <div class="footer-contact">
-                    <p>Nairobi, Kenya</p>
                     <p><a href="mailto:hello@christcenteredadventures.com">hello@christcenteredadventures.com</a></p>
+                    <p>Nairobi, Kenya</p>
                 </div>
-
                 <div class="footer-socials">
-                    <!-- Facebook -->
                     <a href="https://www.facebook.com/profile.php?id=100093692251791" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                     </a>
-
-                    <!-- Instagram -->
                     <a href="https://www.instagram.com/kim.atha_" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                     </a>
-
-                    <!-- LinkedIn -->
                     <a href="https://www.linkedin.com/in/evans-kamau-33801b22b" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                     </a>
@@ -151,10 +146,12 @@
 
         </div>
 
-        <!-- BOTTOM BAR -->
         <div class="footer-bottom">
-            <p>&copy; 2026 Christ Centered Adventures. All rights reserved.</p>
-            <p>Designed with faith in Nairobi, Kenya.</p>
+            <p>© 2026 Christ Centered Adventures. All Rights Reserved.</p>
+            <div class="footer-legal">
+                <a href="{% url 'privacy' %}">Privacy Policy</a>
+                <a href="{% url 'terms' %}">Terms and Conditions</a>
+            </div>
         </div>
     </footer>
 
@@ -165,9 +162,9 @@
             <h2 id="drawer-title">Welcome Back</h2>
             <button id="close-drawer" class="close-drawer">&times;</button>
         </div>
-    
+
         <div class="drawer-body">
-            
+
             <!-- LOGIN VIEW -->
             <div id="drawer-login-view">
                 <a href="{% provider_login_url 'google' %}" class="social-btn google-btn">
@@ -275,14 +272,14 @@
         const loginBtn = document.getElementById('open-login');
         if (loginBtn) {
             loginBtn.addEventListener('click', function(e) {
-                e.preventDefault(); 
+                e.preventDefault();
                 openLoginDrawer();
             });
         }
 
         const closeBtn = document.getElementById('close-drawer');
         const overlay = document.getElementById('login-overlay');
-        
+
         function closeDrawer() {
             document.getElementById('login-drawer').classList.remove('open');
             document.getElementById('login-overlay').classList.remove('open');
@@ -314,7 +311,7 @@
 
         if (userMenuBtn && userMenu) {
             userMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation(); 
+                e.stopPropagation();
                 userMenu.classList.toggle('show');
             });
 

@@ -4,63 +4,74 @@
 {% block title %}Our Tours — Christ Centered Adventures{% endblock %}
 
 {% block content %}
-<div class="sticky-split-layout">
-    
-    <!-- LEFT SIDE: Sticky Image & Live Details -->
-    <div class="sticky-image-panel">
-        {% with first_tour=tours.0 %}
-        <div class="sticky-image-inner" style="background-image: url('{% if first_tour.hero_image %}{{ first_tour.hero_image.url }}{% else %}https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000{% endif %}');" id="main-bg-image"></div>
+<div class="tours-page">
+    <div class="tours-layout">
         
-        <div class="sticky-overlay">
-            <div class="active-tour-meta">
-                <span id="active-tour-duration">{{ first_tour.duration_days|default:"10" }} Days</span>
-                <span id="active-tour-price">From KSh {{ first_tour.price_from|default:"500" }}</span>
-            </div>
-            <h1 id="active-tour-title">{{ first_tour.title|default:"Explore Our Tours" }}</h1>
-            <p id="active-tour-desc">{{ first_tour.summary|default:"Discover your next faith-based journey." }}</p>
+        <!-- LEFT PANEL: Featured Destination (60%) -->
+        <div class="featured-panel">
+            {% with first_tour=tours.0 %}
+            <div class="featured-bg" 
+                 style="background-image: url('{% if first_tour.hero_image %}{{ first_tour.hero_image.url }}{% else %}https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000{% endif %}');" 
+                 id="main-bg-image"></div>
             
-            {% if first_tour %}
-            <a href="{% url 'tour_detail' first_tour.slug %}" id="active-tour-link" class="btn-primary">View Full Details</a>
-            {% endif %}
-        </div>
-        {% endwith %}
-    </div>
-
-    <!-- RIGHT SIDE: Interactive Image Grid -->
-    <div class="scrollable-list-panel">
-        <div class="list-header">
-            <h2>Select a Journey</h2>
-            <p>Click any destination to preview it on the left.</p>
-        </div>
-
-        <div class="tour-image-grid">
-            {% for tour in tours %}
-            <!-- The interactive tile -->
-            <div class="tour-image-tile {% if forloop.first %}active{% endif %}" 
-                 data-title="{{ tour.title }}" 
-                 data-desc="{{ tour.summary|truncatewords:25 }}"
-                 data-image="{% if tour.hero_image %}{{ tour.hero_image.url }}{% else %}https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000{% endif %}"
-                 data-url="{% url 'tour_detail' tour.slug %}"
-                 data-duration="{{ tour.duration_days }} Days"
-                 data-price="From KSh {{ tour.price_from }}"
-                 onclick="handleTileClick(this)">
-                
-                <img src="{% if tour.hero_image %}{{ tour.hero_image.url }}{% else %}https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=500{% endif %}" alt="{{ tour.title }}">
-                
-                <!-- Hover Overlay -->
-                <div class="tile-overlay">
-                    <h3>{{ tour.title }}</h3>
-                    <span class="tile-btn">View Details</span>
+            <div class="featured-content">
+                <div class="featured-meta">
+                    <span class="featured-badge" id="active-tour-duration">{{ first_tour.duration_days|default:"10" }} Days</span>
+                    <span class="featured-badge" id="active-tour-price">From KSh {{ first_tour.price_from|default:"500" }}</span>
                 </div>
+                <h1 id="active-tour-title">{{ first_tour.title|default:"Explore Our Tours" }}</h1>
+                <p id="active-tour-desc">{{ first_tour.summary|default:"Discover your next faith-based journey." }}</p>
+                
+                {% if first_tour %}
+                <a href="{% url 'tour_detail' first_tour.slug %}" id="active-tour-link" class="btn-primary">View Full Details</a>
+                {% endif %}
             </div>
-            {% empty %}
-            <div style="padding: 40px; text-align: center; color: #888;">
-                <h3>No tours available yet.</h3>
-            </div>
-            {% endfor %}
+            {% endwith %}
         </div>
-    </div>
 
+        <!-- RIGHT PANEL: Select Journey (40%) -->
+        <div class="journey-panel">
+            <div class="journey-header">
+                <h2>Choose Your Next Adventure</h2>
+                <p>Click any destination to preview it on the left. Each journey is designed to deepen your faith through transformative travel.</p>
+            </div>
+
+            <div class="journey-grid">
+                {% for tour in tours %}
+                <!-- Destination Card - Interactive Tile -->
+                <div class="destination-card {% if forloop.first %}active{% endif %}" 
+                     data-title="{{ tour.title }}" 
+                     data-desc="{{ tour.summary|truncatewords:25 }}"
+                     data-image="{% if tour.hero_image %}{{ tour.hero_image.url }}{% else %}https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000{% endif %}"
+                     data-url="{% url 'tour_detail' tour.slug %}"
+                     data-duration="{{ tour.duration_days }} Days"
+                     data-price="From KSh {{ tour.price_from }}"
+                     onclick="handleTileClick(this)">
+                    
+                    <img src="{% if tour.hero_image %}{{ tour.hero_image.url }}{% else %}https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=500{% endif %}" 
+                         alt="{{ tour.title }}" 
+                         class="destination-img"
+                         loading="lazy">
+                    
+                    <div class="destination-overlay">
+                        <h3 class="destination-name">{{ tour.title }}</h3>
+                        <a href="{% url 'tour_detail' tour.slug %}" class="destination-btn">
+                            View Details
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div style="padding: 40px; text-align: center; color: var(--text-light);">
+                    <h3>No tours available yet.</h3>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
 </div>
 {% endblock %}
 
@@ -96,7 +107,7 @@
         if(linkBtn) linkBtn.href = url;
 
         // 3. Update active state on the tiles
-        document.querySelectorAll('.tour-image-tile').forEach(tile => tile.classList.remove('active'));
+        document.querySelectorAll('.destination-card').forEach(tile => tile.classList.remove('active'));
         element.classList.add('active');
     }
 </script>
