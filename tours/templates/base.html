@@ -12,8 +12,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}?v=999">
+    <!-- Custom CSS (Version bumped to 1000 to force cache refresh) -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}?v=1000">
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
@@ -26,15 +27,10 @@
     <header class="navbar" id="navbar">
         <div class="nav-container">
             <!-- LOGO -->
-<<<<<<< HEAD
             <a href="{% url 'home' %}" class="navbar-brand">
                 <img src="{% static 'img/logoicon.png' %}"
                      alt="Christ Centered Adventures"
                      class="site-logo">
-=======
-            <a href="/" class="logo logo-container">
-                <img src="{% static 'img/logoicon.png' %}" alt="CCA Logo" class="logo-img">
->>>>>>> e91a9ac6ad703533314bdcf5c016dc8ff8487869
             </a>
 
             <!-- NAV LINKS -->
@@ -182,13 +178,11 @@
                 <form method="POST" action="{% url 'account_login' %}">
                     {% csrf_token %}
 
-                    <!-- ADD THIS ERROR BLOCK -->
                     {% if form.errors %}
                         <div style="background: rgba(255, 68, 68, 0.1); border-left: 4px solid #ff4444; padding: 10px 15px; margin-bottom: 15px; border-radius: 5px;">
                             <p style="color: #ff4444; margin: 0; font-size: 13px;">The username or password you entered is incorrect.</p>
                         </div>
                     {% endif %}
-                    <!-- END ERROR BLOCK -->
 
                     <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <div class="form-group">
