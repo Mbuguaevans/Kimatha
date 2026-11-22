@@ -952,18 +952,18 @@ body {
 }
 
 /* =========================================
-   NEW LOGO STYLES (ZOOMED IN)
+   LOGO STYLES (Clean & Perfect)
    ========================================= */
 .logo-container {
     background-color: #ffffff !important;
-    padding: 5px 15px;
+    padding: 6px 16px;
     border-radius: 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    height: 56px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: transform 0.2s ease;
-    height: 50px; /* Fixed height for the white box */
-    overflow: hidden; /* Hides the transparent edges */
 }
 
 .logo-container:hover {
@@ -971,21 +971,18 @@ body {
 }
 
 .logo-img {
-    height: 150px; /* Make the image huge */
+    height: 42px;
     width: auto;
-    transform: scale(1.0); 
-    /* This pulls the image up/down so the logo sits perfectly in the middle */
-    margin-top: -20px; 
+    display: block;
 }
 
-/* Mobile responsive */
-@media (max-width: 900px) {
+/* Mobile size */
+@media (max-width: 768px) {
     .logo-container {
-        height: 40px;
+        height: 46px;
         padding: 4px 10px;
     }
     .logo-img {
-        height: 120px;
-        margin-top: -15px;
+        height: 34px;
     }
 }
